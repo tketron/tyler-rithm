@@ -1,0 +1,100 @@
+.one {
+  width: 400px;
+  height: 400px;
+  background-color: red;
+}
+
+.two {
+  width: 300px;
+  height: 300px;
+  background-color: yellow;
+}
+
+.three {
+  width: 200px;
+  height: 200px;
+  background-color: green;
+}
+
+.four {
+  width: 100px;
+  height: 100px;
+  background-color: blue;
+}
+
+/* Exercise 1 */
+/* .two {
+  position: relative;
+  top: 50px;
+  left: 50px;
+}
+
+.three {
+  position: relative;
+  top: 50px;
+  left: 50px;
+}
+
+.four {
+  position: relative;
+  top: 50px;
+  left: 50px;
+} */
+
+/* Exercise 2 */
+/* .four {
+  position: relative;
+  z-index: -1;
+} */
+
+/* Exericse 3 */
+/* .three {
+  position: relative;
+  top: 200px;
+  left: 400px;
+}
+
+.four {
+  position: relative;
+  top: 100px;
+} */
+
+/* Exercise 4 */
+/* .one {
+  position: relative;
+}
+.two {
+  position: relative;
+  top: 100px;
+  left: 100px;
+}
+
+.three {
+  position: relative;
+  top: -100px;
+  left: -100px;
+}
+
+.four {
+  position: relative;
+  top: 100px;
+  left: 100px;
+} */
+
+/* Exercise 5 */
+/* .two {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.three {
+  position: relative;
+  top: -200px;
+}
+
+.four {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+} */
