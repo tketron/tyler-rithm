@@ -68,7 +68,7 @@ var obj = {
   }
 };
 
-const { a, b } = obj;
+const { a, b } = obj.numbers;
 ```
 
 ### ES5 Array Swap
@@ -84,7 +84,7 @@ arr[1] = temp;
 
 ```js
 var arr = [1, 2];
-arr = [arr[1], arr[0]];
+[arr[0], arr[1]] = [arr[1], arr[0]];
 ```
 
 ### ES5 Map Callback
