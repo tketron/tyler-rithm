@@ -35,7 +35,8 @@ h3 {
 
 #card div {
   padding: 0px 10px;
-  border: 1px solid darkgray;
+  border-top: 3px solid darkgray;
+  flex-grow: 2;
 }
 
 #card:last-child {
