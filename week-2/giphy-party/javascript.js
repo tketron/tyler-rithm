@@ -12,6 +12,7 @@ $(function() {
 function addNewGif() {
   const searchString = $('#searchText').val();
   getGIF(searchString);
+  $('#searchText').val('');
 }
 
 function clearGIFs() {
@@ -21,9 +22,6 @@ function clearGIFs() {
 function getGIF(string) {
   let address = `${GIPHY_SEARCH_URL}?tag=${string}&api_key=${KEY}`;
   $.get(address, function(data) {
-    console.log(data.data);
-    // console.log(data.data.url);
-    // return data.data.embed_url;
     let gifImage = data.data.image_url;
     $('#gif-container').prepend(`<div><img src='${gifImage}'></div>`);
   });
