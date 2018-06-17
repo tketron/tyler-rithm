@@ -11,17 +11,18 @@ math = {
 }
 
 
-@app.route('/calculate')
+@app.route('/math')
 def calculate():
     return render_template('calc.html')
 
 
-@app.route('/math')
+@app.route('/calculate')
 def perform_math():
     num1 = int(request.args.get('num1'))
     num2 = int(request.args.get('num2'))
     operation = request.args.get('operation')
-    return str(math[operation](num1, num2))
+    result = math[operation](num1, num2)
+    return render_template('result.html', result=result)
 
 
 @app.route('/')
