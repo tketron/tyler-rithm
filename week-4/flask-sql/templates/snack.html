@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>{{snack.name}}</title>
+</head>
+<body>
+  <h1>{{ snack.name }} is a {{ snack.kind }}</h1>
+  <a href="{{url_for('get_all_snacks')}}">Back to all snacks</a>
+  <form action="{{url_for('edit_snack', snack_id=snack.id)}}?_method=PATCH" method="POST">
+    Name: <input type="text" name="name">
+    Kind: <input type="text" name="kind">
+    <button type="submit">EDIT THIS SNACK</button>
+  </form>
+  <a href="{{url_for('delete_snack', snack_id=snack.id)}}?_method=DELETE">Delete this snack :(</a>
+</body>
+</html>
