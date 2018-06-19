@@ -29,7 +29,7 @@ db.create_all()
 @app.route('/snacks')
 def get_all_snacks():
     snacks = Snack.query.all()
-    return render_template('snacks.html', snacks=snacks)
+    return render_template('index.html', snacks=snacks)
 
 
 # /snacks PUT add a new snack

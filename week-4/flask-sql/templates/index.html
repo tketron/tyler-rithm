@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>SNAX</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
   <ul>
     {% for snack in snacks %}
       <li><a href="/snacks/{{snack.id}}">{{ snack.name }}</a> is a {{ snack.kind }}</li>
@@ -18,5 +12,5 @@
     Kind: <input type="text" name="kind">
     <button type="submit">MAKE A SNACK</button>
   </form>
-</body>
-</html>
+
+  {% endblock %}
