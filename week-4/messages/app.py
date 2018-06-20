@@ -16,6 +16,15 @@ class User(db.Model):
     first_name = db.Column(db.Text, nullable=False)
     last_name = db.Column(db.Text, nullable=False)
     image_url = db.Column(db.Text)
+    messages = db.relationship('Message', backref='user')
+
+
+class Message(db.Model):
+    __tablename__ = 'messages'
+
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
 db.create_all()
@@ -24,9 +33,13 @@ db.create_all()
 # u1 = User(first_name='Tyler', last_name='Ketron')
 # u2 = User(first_name='Matthew', last_name='Elliott')
 # u3 = User(first_name='Andrew', last_name='Schnieder')
+# m1 = Message(content="hello world!", user_id=1)
+# m2 = Message(content="My second message", user_id=1)
 # db.session.add(u1)
 # db.session.add(u2)
 # db.session.add(u3)
+# db.session.add(m1)
+# db.session.add(m2)
 # db.session.commit()
 
 
@@ -94,6 +107,69 @@ def delete_user(user_id):
     db.session.delete(user)
     db.session.commit()
     return redirect(url_for('get_users'))
+
+
+# Message routes
+
+
+@app.route('/users/<int:user_id>/messages')
+def get_messages(user_id):
+    """Render a list of all messages"""
+    return render_template(
+        'messages/index.html',
+        messages=User.query.get_or_404(user_id).messages,
+        user_id=user_id)
+
+
+@app.route('/messages/<int:message_id>')
+def show_message(message_id):
+    """Render a single message"""
+    return render_template(
+        'messages/show.html', message=Message.query.get_or_404(message_id))
+
+
+@app.route('/users/<int:user_id>/messages/new')
+def add_message(user_id):
+    """Render the form to create a new message"""
+    return render_template('messages/new.html', user_id=user_id)
+
+
+@app.route('/users/<int:user_id>/message', methods=['POST'])
+def create_message(user_id):
+    """Creates a new message in the database"""
+    new_message = Message(
+        content=request.values.get('content'), user_id=user_id)
+
+    db.session.add(new_message)
+    db.session.commit()
+    return redirect(url_for('get_messages', user_id=user_id))
+
+
+@app.route('/messages/<int:message_id>/edit')
+def edit_message(message_id):
+    """Renders a form to edit a message"""
+    return render_template(
+        'messages/edit.html', message=Message.query.get_or_404(message_id))
+
+
+@app.route('/messages/<int:message_id>', methods=['PATCH'])
+def update_message(message_id):
+    """Updates a message in the database"""
+    message = Message.query.get_or_404(message_id)
+    message.content = request.values.get('content')
+    db.session.add(message)
+    db.session.commit()
+    return redirect(url_for('show_message', message_id=message_id))
+
+
+@app.route('/messages/<int:message_id>/delete', methods=['DELETE'])
+def delete_message(message_id):
+    """Deletes a message then redirects to the list of users"""
+    message = Message.query.get_or_404(message_id)
+    user_id = message.user_id
+    db.session.delete(message)
+    db.session.commit()
+    return redirect(url_for('get_messages', user_id=user_id))
 
 
 # Error routes
