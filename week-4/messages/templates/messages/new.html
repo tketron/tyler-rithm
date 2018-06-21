@@ -6,5 +6,12 @@
     <input type="textarea" name="content" id="content"></input>
 
     <button type="submit">Add Message!</button>
+
+    {% for tag in tags %}
+      <div>
+        <input type="checkbox" name="tags" id="tag_{{ tag.id }}" value="{{ tag.id }}">
+        <label for="tag_{{ tag.id }}">{{ tag.name }}</label>
+      </div>
+    {% endfor %}
   </form>
 {% endblock %}

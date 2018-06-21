@@ -16,6 +16,7 @@ class User(db.Model):
     first_name = db.Column(db.Text, nullable=False)
     last_name = db.Column(db.Text, nullable=False)
     image_url = db.Column(db.Text)
+
     messages = db.relationship('Message', backref='user')
 
 
@@ -33,6 +34,19 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, nullable=False)
 
+    messages = db.relationship(
+        'Message', secondary='tags_messages', backref=db.backref('tags'))
+
+
+tags_messages = db.Table(
+    'tags_messages',
+    db.Column(
+        'tag_id', db.Integer, db.ForeignKey('tags.id'), primary_key=True),
+    db.Column(
+        'message_id',
+        db.Integer,
+        db.ForeignKey('messages.id'),
+        primary_key=True))
 
 # Need association table between messages and tags
 
@@ -137,14 +151,16 @@ def get_messages(user_id):
 @app.route('/messages/<int:message_id>')
 def show_message(message_id):
     """Render a single message"""
+    message = Message.query.get_or_404(message_id)
     return render_template(
-        'messages/show.html', message=Message.query.get_or_404(message_id))
+        'messages/show.html', message=message, tags=message.tags)
 
 
 @app.route('/users/<int:user_id>/messages/new')
 def add_message(user_id):
     """Render the form to create a new message"""
-    return render_template('messages/new.html', user_id=user_id)
+    tags = Tag.query.all()
+    return render_template('messages/new.html', user_id=user_id, tags=tags)
 
 
 @app.route('/users/<int:user_id>/message', methods=['POST'])
@@ -152,7 +168,8 @@ def create_message(user_id):
     """Creates a new message in the database"""
     new_message = Message(
         content=request.values.get('content'), user_id=user_id)
-
+    tag_ids = request.values.getlist('tags')
+    new_message.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
     db.session.add(new_message)
     db.session.commit()
     return redirect(url_for('get_messages', user_id=user_id))
