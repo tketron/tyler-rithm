@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="pets-container">
+  {% for pet in pets %}
+  <div class="pet-card">
+    <img src="{{ pet.photo_url }}" alt="">
+    <p class="pet-name">{{ pet.name }}</p>
+    {% if pet.available %}
+      <span class="available-text">Available!</span>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+
+{% endblock %}
