@@ -27,19 +27,32 @@ class Message(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
+class Tag(db.Model):
+    __tablename__ = 'tags'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, nullable=False)
+
+
+# Need association table between messages and tags
+
 db.create_all()
 
-# Temporary hard coded users
+# Temporary hard coded db seeds
 # u1 = User(first_name='Tyler', last_name='Ketron')
 # u2 = User(first_name='Matthew', last_name='Elliott')
 # u3 = User(first_name='Andrew', last_name='Schnieder')
 # m1 = Message(content="hello world!", user_id=1)
 # m2 = Message(content="My second message", user_id=1)
+# t1 = Tag(name='LOL')
+# t2 = Tag(name='sad')
 # db.session.add(u1)
 # db.session.add(u2)
 # db.session.add(u3)
 # db.session.add(m1)
 # db.session.add(m2)
+# db.session.add(t1)
+# db.session.add(t2)
 # db.session.commit()
 
 
@@ -170,6 +183,61 @@ def delete_message(message_id):
     db.session.delete(message)
     db.session.commit()
     return redirect(url_for('get_messages', user_id=user_id))
+
+
+# Tags routes
+
+
+@app.route('/tags')
+def get_tags():
+    """Render a list of all tags"""
+    return render_template('tags/index.html', tags=Tag.query.all())
+
+
+@app.route('/tags/<int:tag_id>')
+def show_tag(tag_id):
+    """Render a single message"""
+    return render_template('tags/show.html', tag=Tag.query.get_or_404(tag_id))
+
+
+@app.route('/tags/new')
+def add_tag():
+    """Render the form to create a new tag"""
+    return render_template('tags/new.html')
+
+
+@app.route('/tags', methods=['POST'])
+def create_tag():
+    """Creates a new tag in the database"""
+    new_tag = Tag(name=request.values.get('name'))
+    db.session.add(new_tag)
+    db.session.commit()
+    return redirect(url_for('get_tags'))
+
+
+@app.route('/tags/<int:tag_id>/edit')
+def edit_tag(tag_id):
+    """Renders a form to edit a tag"""
+    return render_template('tags/edit.html', tag=Tag.query.get_or_404(tag_id))
+
+
+@app.route('/tags/<int:tag_id>', methods=['PATCH'])
+def update_tag(tag_id):
+    """Updates a tag in the database"""
+    tag = Tag.query.get_or_404(tag_id)
+    tag.name = request.values.get('name')
+    db.session.add(tag)
+    db.session.commit()
+    return redirect(url_for('show_tag', tag_id=tag_id))
+
+
+@app.route('/tags/<int:tag_id>/delete', methods=['DELETE'])
+def delete_tag(tag_id):
+    """Deletes a tag then redirects to the list of tags"""
+    tag = Tag.query.get_or_404(tag_id)
+    db.session.delete(tag)
+    db.session.commit()
+    return redirect(url_for('get_tags'))
 
 
 # Error routes
