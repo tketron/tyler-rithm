@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1><a href="{{ url_for('show_pets') }}">see all pets</a></h1>
+
+<div class="pet-card">
+  <img src="{{ pet.photo_url }}" alt="">
+  <p class="pet-name">Name: {{ pet.name }}</p>
+  <p class="pet-age">Age: {{ pet.age }}</p>
+  <p class="pet-species">Species: {{ pet.species }}</p>
+</div>
+
+<form method="POST" action="{{url_for('show_or_edit_pet', pet_id=pet.id)}}">
+  {{form.hidden_tag()}}
+  {% for field in form if field.widget.input_type != 'hidden'%}
+  <p>
+    {{ field.label }}
+    {{ field }}
+    <span>
+      {% if field.errors %}
+        {% for error in field.errors %}
+          {{ error }}
+        {% endfor %}
+      {% endif %}
+    </span>
+  </p>
+  {% endfor %}
+  <button type="submit">Edit pet!</button>
+</form>
+
+{% endblock %}

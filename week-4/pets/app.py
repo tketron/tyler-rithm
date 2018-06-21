@@ -40,7 +40,13 @@ class AddPetForm(FlaskForm):
     photo_url = StringField('Photo URL', validators=[Optional(), URL()])
     age = IntegerField('Age', validators=[NumberRange(min=0, max=30)])
     notes = StringField('Notes', validators=[Optional()])
-    # available = BooleanField('Available', validators=[])
+
+
+class EditPetForm(FlaskForm):
+    """Edit Pet form object"""
+    photo_url = StringField('Photo URL', validators=[Optional(), URL()])
+    notes = StringField('Notes', validators=[Optional()])
+    available = BooleanField('Available', validators=[])
 
 
 # add pets
@@ -94,3 +100,25 @@ def add_pet():
 
     else:
         return render_template('show_add_pet_form.html', form=form)
+
+
+@app.route('/<int:pet_id>', methods=['GET', 'POST'])
+def show_or_edit_pet(pet_id):
+    """Route to show an existing pet along with the form to edit the pet"""
+    pet = Pet.query.get(pet_id)
+
+    form = EditPetForm(obj=pet)
+
+    if form.validate_on_submit():
+        #edit the pet
+        pet = Pet.query.get(pet_id)
+        pet.photo_url = form.data['photo_url']
+        pet.notes = form.data['notes']
+        pet.available = form.data['available']
+        db.session.add(pet)
+        db.session.commit()
+
+        #reload show pet page
+        return redirect(url_for('show_or_edit_pet', pet_id=pet.id))
+    else:
+        return render_template('show_and_edit_pet.html', pet=pet, form=form)
