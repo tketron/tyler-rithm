@@ -7,6 +7,10 @@
   <title>Adopt.r</title>
 </head>
 <body>
+
+  {% for msg in get_flashed_messages() %}
+    <div>{{ msg }}</div>
+  {% endfor %}
   {% block content %}
 
   {% endblock %}

@@ -2,6 +2,15 @@
 
 {% block content %}
 
+<div class="random-pets-container">
+    <div class="pet-card">
+      <img src="{{ random.photo_url }}" alt="">
+      <h3 class="pet-name">{{ random.name }}</h3>
+      <h4 class="pet-location">{{ random.city }}, {{ random.state }}</h4>
+      <p>{{ random.description }}</p>
+    </div>
+  </div>
+
 <div class="pets-container">
   {% for pet in pets %}
   <div class="pet-card">

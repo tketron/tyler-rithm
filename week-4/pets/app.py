@@ -1,9 +1,12 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, BooleanField
 from wtforms.validators import DataRequired, Optional, URL, NumberRange, AnyOf
+
+import requests
+import os
 
 app = Flask(__name__)
 
@@ -75,7 +78,24 @@ class EditPetForm(FlaskForm):
 def show_pets():
     """Route to show all pets"""
     pets = Pet.query.all()
-    return render_template('index.html', pets=pets)
+
+    random_pet = requests.get(
+        'http://api.petfinder.com/pet.getRandom',
+        params={
+            'key': os.environ['PETFINDER_API_KEY'],
+            'output': 'basic',
+            'format': 'json'
+        })
+
+    rp = random_pet.json()['petfinder']['pet']
+    rp = {
+        'name': rp['name']['$t'],
+        'description': rp['description']['$t'],
+        'photo_url': rp['media']['photos']['photo'][2]['$t'],
+        'city': rp['contact']['city']['$t'],
+        'state': rp['contact']['state']['$t']
+    }
+    return render_template('index.html', pets=pets, random=rp)
 
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -96,6 +116,7 @@ def add_pet():
         db.session.commit()
 
         # redirect to show all pets
+        flash(f"Pet {pet.name} added!")
         return redirect(url_for('show_pets'))
 
     else:
@@ -111,14 +132,27 @@ def show_or_edit_pet(pet_id):
 
     if form.validate_on_submit():
         #edit the pet
-        pet = Pet.query.get(pet_id)
         pet.photo_url = form.data['photo_url']
         pet.notes = form.data['notes']
         pet.available = form.data['available']
-        db.session.add(pet)
         db.session.commit()
 
         #reload show pet page
+        flash(f"Pet {pet.name} updated!")
         return redirect(url_for('show_or_edit_pet', pet_id=pet.id))
     else:
         return render_template('show_and_edit_pet.html', pet=pet, form=form)
+
+
+@app.route('/api/pets/<int:pet_id>')
+def return_pet_info(pet_id):
+    pet = Pet.query.get_or_404(pet_id)
+    info = {
+        'name': pet.name,
+        'species': pet.species,
+        'photo_url': pet.photo_url,
+        'notes': pet.notes,
+        'available': pet.available,
+        'age': pet.age
+    }
+    return jsonify(info)
