@@ -2,26 +2,45 @@
 
 {% block content %}
 
-<div class="random-pets-container">
-    <div class="pet-card">
-      <img src="{{ random.photo_url }}" alt="">
-      <h3 class="pet-name">{{ random.name }}</h3>
-      <h4 class="pet-location">{{ random.city }}, {{ random.state }}</h4>
-      <p>{{ random.description }}</p>
-    </div>
+<div class="jumbotron">
+    <h1 class="display-3">{{ random.name }}</h1>
+    <p class="lead">{{ random.city }}, {{ random.state }}</p>
+    <img src="{{ random.photo_url }}" alt="">
+    <hr class="my-4">
+    <p>{{ random.description }}</p>
   </div>
 
-<div class="pets-container">
+<form class="mb-3" action="{{ url_for('add_pet') }}">
+  <button type="button submit" class="btn btn-primary btn-lg btn-block">Add a new pet</button>
+</form>
+
+<div class="card-columns">
   {% for pet in pets %}
-  <div class="pet-card">
-    <img src="{{ pet.photo_url }}" alt="">
-    <a href="{{ url_for('show_or_edit_pet', pet_id=pet.id) }}"> <p class="pet-name">{{ pet.name }}</p> </a>
-    {% if pet.available %}
-      <span class="available-text">Available!</span>
-    {% endif %}
-  </div>
-  {% endfor %}
-</div>
+    <div class="card mb-3" style="width: 20rem;">
+      <h3 class="card-header">{{ pet.name }}</h3>
+        <img style="height: 200px; display: block;" src="{{ pet.photo_url }}" alt="Pet image">
+        <div class="card-body">
+          <p class="card-text">{{ pet.notes }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Species: {{ pet.species.title() }}</li>
+          <li class="list-group-item">Age: {{ pet.age }}</li>
+        </ul>
+        <div class="card-body">
+          <a href="{{ url_for('show_or_edit_pet', pet_id=pet.id) }}" class="card-link">Find out more!</a>
+        </div>
 
+        <div class="card-footer text-muted">
+          {% if pet.available %}
+            I'm Available!
+          {% endif %}
+        </div>
+
+
+    </div>
+
+  {% endfor %}
+
+</div>
 
 {% endblock %}

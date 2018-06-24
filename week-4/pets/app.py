@@ -2,8 +2,8 @@ from flask import Flask, render_template, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, BooleanField
-from wtforms.validators import DataRequired, Optional, URL, NumberRange, AnyOf
+from wtforms import StringField, IntegerField, BooleanField, RadioField, TextAreaField
+from wtforms.validators import InputRequired, Optional, URL, NumberRange
 
 import requests
 import os
@@ -35,20 +35,20 @@ db.create_all()
 
 class AddPetForm(FlaskForm):
     """Add Pet form object"""
-    name = StringField('Name', validators=[DataRequired()])
-    species = StringField(
+    name = StringField('Name', validators=[InputRequired()])
+    species = RadioField(
         'Species',
-        validators=[DataRequired(),
-                    AnyOf(['cat', 'dog', 'porcupine'])])
+        choices=[('cat', 'Cat'), ('dog', 'Dog'), ('porcupine', 'Porcupine'),
+                 ('rabbit', 'Rabbit'), ('chicken', 'Chicken'), ('pig', 'Pig')])
     photo_url = StringField('Photo URL', validators=[Optional(), URL()])
     age = IntegerField('Age', validators=[NumberRange(min=0, max=30)])
-    notes = StringField('Notes', validators=[Optional()])
+    notes = TextAreaField('Notes', validators=[Optional()])
 
 
 class EditPetForm(FlaskForm):
     """Edit Pet form object"""
     photo_url = StringField('Photo URL', validators=[Optional(), URL()])
-    notes = StringField('Notes', validators=[Optional()])
+    notes = TextAreaField('Notes', validators=[Optional()])
     available = BooleanField('Available', validators=[])
 
 
@@ -116,7 +116,7 @@ def add_pet():
         db.session.commit()
 
         # redirect to show all pets
-        flash(f"Pet {pet.name} added!")
+        flash(f"{pet.name} added!")
         return redirect(url_for('show_pets'))
 
     else:
@@ -138,7 +138,7 @@ def show_or_edit_pet(pet_id):
         db.session.commit()
 
         #reload show pet page
-        flash(f"Pet {pet.name} updated!")
+        flash(f"{pet.name} updated!")
         return redirect(url_for('show_or_edit_pet', pet_id=pet.id))
     else:
         return render_template('show_and_edit_pet.html', pet=pet, form=form)
