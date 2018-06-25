@@ -14,7 +14,8 @@ app.config['SECRET_KEY'] = '123456'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://localhost/pets'
 
 db = SQLAlchemy(app)
-toolbar = DebugToolbarExtension(app)
+
+# toolbar = DebugToolbarExtension(app)
 
 
 class Pet(db.Model):
@@ -87,14 +88,18 @@ def show_pets():
             'format': 'json'
         })
 
-    rp = random_pet.json()['petfinder']['pet']
-    rp = {
-        'name': rp['name']['$t'],
-        'description': rp['description']['$t'],
-        'photo_url': rp['media']['photos']['photo'][2]['$t'],
-        'city': rp['contact']['city']['$t'],
-        'state': rp['contact']['state']['$t']
-    }
+    rp_json = random_pet.json()['petfinder']['pet']
+    try:
+        rp = {
+            'name': rp_json['name']['$t'],
+            'description': rp_json['description']['$t'],
+            'photo_url': rp_json['media']['photos']['photo'][2]['$t'],
+            'city': rp_json['contact']['city']['$t'],
+            'state': rp_json['contact']['state']['$t']
+        }
+    except KeyError as err:
+        print(err)
+
     return render_template('index.html', pets=pets, random=rp)
 
 

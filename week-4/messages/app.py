@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for, flash
+from flask import Flask, render_template, redirect, request, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_modus import Modus
 
@@ -10,6 +10,9 @@ modus = Modus(app)
 
 
 class User(db.Model):
+    """
+
+    """
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
