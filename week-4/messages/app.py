@@ -1,17 +1,24 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_modus import Modus
+from flask_bcrypt import Bcrypt
+from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://localhost/messages'
+app.config['SECRET_KEY'] = 'my_top_secret_key'
+app.config['DEBUG_TB_ENABLED'] = True
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 db = SQLAlchemy(app)
 modus = Modus(app)
+bcrypt = Bcrypt()
+toolbar = DebugToolbarExtension(app)
 
 
 class User(db.Model):
     """
-
+    Class representing a User model.
     """
     __tablename__ = 'users'
 
@@ -19,8 +26,36 @@ class User(db.Model):
     first_name = db.Column(db.Text, nullable=False)
     last_name = db.Column(db.Text, nullable=False)
     image_url = db.Column(db.Text)
+    username = db.Column(db.Text, nullable=False)
+    password = db.Column(db.Text, nullable=False)
 
     messages = db.relationship('Message', backref='user')
+
+    @classmethod
+    def register(cls, first_name, last_name, username, password):
+        """Register a user with a hashed password.
+        
+        Returns user object.
+        """
+        hashed = bcrypt.generate_password_hash(password)
+        hashed_utf8 = hashed.decode('utf8')
+        return cls(
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            password=hashed_utf8)
+
+    @classmethod
+    def authenticate(cls, username, password):
+        """Validate that the user exists and the password is correct
+
+        Returns the user if valid, otherwise returns false.
+        """
+        user = User.query.filter_by(username=username).first()
+        if user:
+            if bcrypt.check_password_hash(user.password, password):
+                return user
+        return False
 
 
 class Message(db.Model):
@@ -51,14 +86,24 @@ tags_messages = db.Table(
         db.ForeignKey('messages.id'),
         primary_key=True))
 
-# Need association table between messages and tags
-
 db.create_all()
 
 # Temporary hard coded db seeds
-# u1 = User(first_name='Tyler', last_name='Ketron')
-# u2 = User(first_name='Matthew', last_name='Elliott')
-# u3 = User(first_name='Andrew', last_name='Schnieder')
+# u1 = User(
+#     first_name='Tyler',
+#     last_name='Ketron',
+#     username='tketron',
+#     password='abc123')
+# u2 = User(
+#     first_name='Matthew',
+#     last_name='Elliott',
+#     username='melliott',
+#     password='ilikecats')
+# u3 = User(
+#     first_name='Andrew',
+#     last_name='Schnieder',
+#     username='aschnieder',
+#     password='magictg')
 # m1 = Message(content="hello world!", user_id=1)
 # m2 = Message(content="My second message", user_id=1)
 # t1 = Tag(name='LOL')
@@ -104,11 +149,37 @@ def add_user():
 @app.route('/users', methods=['POST'])
 def create_user():
     """Creates a new user in the database"""
-    new_user = User(
+    new_user = User.register(
         first_name=request.values.get('fname'),
-        last_name=request.values.get('lname'))
+        last_name=request.values.get('lname'),
+        username=request.values.get('username'),
+        password=request.values.get('password'))
+
     db.session.add(new_user)
     db.session.commit()
+    return redirect(url_for('get_users'))
+
+
+@app.route('/users/login', methods=['GET', 'POST'])
+def login_user():
+    if request.method == 'POST':
+        # authenticate
+        u = User.authenticate(
+            username=request.values.get('username'),
+            password=request.values.get('password'))
+        if u:
+            # save to session
+            session['user'] = u.id
+            return redirect(url_for('get_users'))
+
+    else:
+        # render login form
+        return render_template('/users/login.html')
+
+
+@app.route('/users/logout')
+def logout_user():
+    session['user'] = False
     return redirect(url_for('get_users'))
 
 

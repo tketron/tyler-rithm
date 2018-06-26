@@ -56,6 +56,14 @@ class UserCRUDTests(unittest.TestCase):
         self.assertNotIn(f'{u.first_name} {u.last_name}'.encode('ASCII'),
                          result.data)
 
+    def test_message_not_found(self):
+        """Test that a 404 is rendered when a bad user id is given."""
+
+        request = self.client.get(f'/users/100000')
+
+        self.assertEqual(request.status_code, 404)
+        self.assertIn(b'Not Found', request.data)
+
 
 if __name__ == '__main__':
     unittest.main()

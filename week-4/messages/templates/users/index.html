@@ -1,16 +1,41 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<a href="{{ url_for('add_user') }}">Add a new user</a>
+<a href="{{ url_for('add_user') }}"><button type="button" class="m-2 btn btn-primary">Add a new user</button> </a>
 
-<ul>
-  {% for user in users %}
-  <li>
-    <a href="users/{{user.id}}">{{ user.first_name }} {{ user.last_name }} </a>
-  </li>
-  {% endfor %}
-</ul>
+<table class="table table-hover">
+    <!-- <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">See Messages</th>
+        <th scope="col">Edit User</th>
+        <th scope="col">Delete User</th>
+      </tr>
+    </thead> -->
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <th scope="row"><a href="{{ url_for('show_user', user_id=user.id) }}">{{user.first_name }} {{ user.last_name }}</a></th>
+          <td>
+            <a href="{{ url_for('get_messages', user_id=user.id) }}">
+              <button type="button" class="btn btn-info">See Messages</button>
+            </a>
+          </td>
+          <td>
+            <a href="{{ url_for('edit_user', user_id=user.id) }}">
+              <button type="button" class="btn btn-warning">Edit User</button>
+            </a>
+          </td>
+          <td>
+            <a href="{{ url_for('delete_user', user_id=user.id) }}">
+              <button type="button" class="btn btn-danger">Delete User</button>
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-<a href="{{ url_for('get_tags') }}">See tags</a>
+<a href="{{ url_for('get_tags') }}"><button type="button" class="m-2 btn btn-primary">See tags</button> </a>
 
 {% endblock %}

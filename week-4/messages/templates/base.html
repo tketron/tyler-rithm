@@ -5,10 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/sandstone/bootstrap.min.css" rel="stylesheet" integrity="sha384-7MvlWCBuyFQHTibL0ta2jXuoCAaC8s2FIwWC/olSTVZ2OBod2DVHIXQcvUKdfJSA" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
   <title>messag.er</title>
 </head>
 <body>
-  {% block content %}
-  {% endblock %}
+  <header>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-between">
+          <a class="navbar-brand" href="/">message.r</a>
+
+
+          {% if session.get('user') %}
+
+          <form class="form-inline my-2 my-lg-0" action="{{url_for('logout_user')}}">
+              <button class="btn btn-secondary my-2 my-sm-0" type="submit">Logout</button>
+          </form>
+
+          {% else %}
+
+          <form class="form-inline my-2 my-lg-0" action="{{url_for('login_user')}}">
+              <button class="btn btn-secondary my-2 my-sm-0" type="submit">Login</button>
+          </form>
+
+          {% endif %}
+      </nav>
+  </header>
+
+  <div class="container">
+    <div class="row">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </div>
+
 </body>
 </html>

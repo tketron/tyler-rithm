@@ -48,6 +48,14 @@ class MessagesCRUDTests(unittest.TestCase):
 
         self.assertNotIn(f'{m.content}'.encode('ASCII'), request.data)
 
+    def test_message_not_found(self):
+        """Test that a 404 is rendered when a bad message id is given."""
+
+        request = self.client.get(f'/messages/100000')
+
+        self.assertEqual(request.status_code, 404)
+        self.assertIn(b'Not Found', request.data)
+
 
 if __name__ == '__main__':
     unittest.main()

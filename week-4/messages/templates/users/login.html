@@ -2,12 +2,7 @@
 
 {% block content %}
 <div class="m-2">
-  <form action="{{ url_for('create_user') }}" method="POST">
-    <label for="fname">First Name: </label>
-    <input type="text" name="fname" id="fname"></input>
-
-    <label for="lname">Last Name: </label>
-    <input type="text" name="lname" id="lname"></input>
+  <form action="{{ url_for('login_user') }}" method="POST">
 
     <label for="username">Username: </label>
     <input type="text" name="username" id="username"></input>
@@ -15,7 +10,7 @@
     <label for="password">Password: </label>
     <input type="text" name="password" id="password"></input>
 
-    <button type="submit">Add User!</button>
+    <button type="submit">Login!</button>
   </form>
 </div>
 {% endblock %}
