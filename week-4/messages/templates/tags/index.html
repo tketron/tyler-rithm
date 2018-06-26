@@ -1,16 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="col-8 m-3">
+  <div class="list-group list-group-flush">
+      {% for tag in tags %}
+          <a class="list-group-item list-group-item-action" href="{{ url_for('show_tag', tag_id=tag.id) }}">
+            <p class="lead">{{ tag.name }}</p>
+            <p>{{ tag.messages|length }} messages with this tag</p>
+          </a>
 
-<a href="{{ url_for('add_tag') }}">Add a new tag</a>
+      {% endfor %}
+  </div>
+</div>
 
-<ul>
-  {% for tag in tags %}
-  <li>
-    <a href="tags/{{tag.id}}">{{ tag.name }}</a>
-  </li>
-  {% endfor %}
-</ul>
 
-<a href="{{ url_for('get_users') }}">Show Users</a>
+<div class="col-8 m-3">
+  <a class="btn btn-primary btn-large" href="{{ url_for('add_tag') }}" role="button">Add a new tag!</a>
+  <a class="btn btn-primary btn-large" href="{{ url_for('get_users') }}" role="button">Show users</a>
+</div>
+
 {% endblock %}

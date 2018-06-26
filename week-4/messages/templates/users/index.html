@@ -4,14 +4,6 @@
 <a href="{{ url_for('add_user') }}"><button type="button" class="m-2 btn btn-primary">Add a new user</button> </a>
 
 <table class="table table-hover">
-    <!-- <thead>
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">See Messages</th>
-        <th scope="col">Edit User</th>
-        <th scope="col">Delete User</th>
-      </tr>
-    </thead> -->
     <tbody>
       {% for user in users %}
         <tr>

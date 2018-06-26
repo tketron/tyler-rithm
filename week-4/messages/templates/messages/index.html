@@ -1,19 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="col-8 m-3">
+  <div class="list-group list-group-flush">
+    {% for message in messages %}
+        <a class="list-group-item list-group-item-action" href="{{ url_for('show_message', message_id=message.id) }}">{{ message.content }}</a>
+    {% endfor %}
+  </div>
+</div>
 
-<a href="{{ url_for('add_message', user_id=user_id) }}">Add a message!</a>
-
-<ul>
-{% for message in messages %}
-<li>
-  <a href="{{ url_for('show_message', message_id=message.id) }}">{{ message.content }}</a>
-</li>
-{% endfor %}
+<div class="col-8 m-3">
+  <a class="btn btn-primary btn-large" href="{{ url_for('add_message', user_id=user_id) }}" role="button">Add a message!</a>
+  <a class="btn btn-primary btn-large" href="{{ url_for('show_user', user_id=user_id) }}" role="button">Back to user</a>
+</div>
 
 
-</ul>
 
-<a href="{{ url_for('show_user', user_id=user_id) }}">Back to user</a>
 
 {% endblock %}

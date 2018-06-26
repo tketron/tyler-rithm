@@ -162,23 +162,22 @@ def create_user():
 
 @app.route('/users/login', methods=['GET', 'POST'])
 def login_user():
+    """Either render the login form or accept the input and attempt to authenticate."""
     if request.method == 'POST':
-        # authenticate
         u = User.authenticate(
             username=request.values.get('username'),
             password=request.values.get('password'))
         if u:
-            # save to session
             session['user'] = u.id
             return redirect(url_for('get_users'))
 
     else:
-        # render login form
         return render_template('/users/login.html')
 
 
 @app.route('/users/logout')
 def logout_user():
+    """Clear the session user value to logout the user."""
     session['user'] = False
     return redirect(url_for('get_users'))
 
@@ -287,7 +286,7 @@ def get_tags():
 
 @app.route('/tags/<int:tag_id>')
 def show_tag(tag_id):
-    """Render a single message"""
+    """Render a single tag"""
     return render_template('tags/show.html', tag=Tag.query.get_or_404(tag_id))
 
 

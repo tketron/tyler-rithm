@@ -1,9 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{user.first_name}} {{user.last_name}}</h1>
-<h3><a href="{{ url_for('get_messages', user_id=user.id) }}">See messages</a></h3>
-<a href="{{ url_for('edit_user', user_id=user.id) }}">Edit User</a>
-<a href="{{ url_for('delete_user', user_id=user.id) }}?_method=DELETE">Delete User</a>
-<h3><a href="{{ url_for('get_users') }}">All Users</a></h3>
+<table class="table table-hover mt-4">
+    <tbody>
+        <tr>
+          <th scope="row">{{user.first_name }} {{ user.last_name }}</a></th>
+          <td>
+            <a href="{{ url_for('get_messages', user_id=user.id) }}">
+              <button type="button" class="btn btn-info">See Messages</button>
+            </a>
+          </td>
+          <td>
+            <a href="{{ url_for('edit_user', user_id=user.id) }}">
+              <button type="button" class="btn btn-warning">Edit User</button>
+            </a>
+          </td>
+          <td>
+            <a href="{{ url_for('delete_user', user_id=user.id) }}">
+              <button type="button" class="btn btn-danger">Delete User</button>
+            </a>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+<a href="{{ url_for('get_users') }}"><button type="button" class="m-2 btn btn-primary">Back to users</button> </a>
 {% endblock %}
