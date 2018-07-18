@@ -1,0 +1,19 @@
+.Lottery {
+  border: 1px dashed black;
+  padding: 1em;
+  margin: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#Lottery-title {
+}
+
+#Lottery-draw-btn {
+  border-radius: 5%;
+  background-color: black;
+  color: lightcyan;
+  padding: 0.5em;
+  font-size: 16px;
+}

@@ -1,0 +1,29 @@
+#container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#title {
+  color: grey;
+}
+
+#pokeContainer {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.pokecard {
+  background-color: lightskyblue;
+  border-radius: 10%;
+  width: 200px;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+img {
+  height: 100%;
+}
