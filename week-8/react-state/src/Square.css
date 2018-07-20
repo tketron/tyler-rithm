@@ -2,3 +2,7 @@
   height: 150px;
   width: 150px;
 }
+
+.Square:hover {
+  opacity: 0.5;
+}

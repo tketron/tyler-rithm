@@ -7,7 +7,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Container numSquares={24} />
+        <Container numSquares={40} />
         <CoinFlipGame />
       </div>
     );

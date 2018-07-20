@@ -19,6 +19,12 @@ class Square extends Component {
     });
   }
 
+  // componentDidMount() {
+  //   const intervalId = setInterval(() => {
+  //     this.changeColor();
+  //   }, Math.floor(Math.random() * 10000));
+  // }
+
   render() {
     return (
       <div

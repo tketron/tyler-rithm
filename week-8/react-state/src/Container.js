@@ -3,10 +3,6 @@ import './Container.css';
 import Square from './Square';
 
 class Container extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
   static defaultProps = {
     numSquares: 24
   };
