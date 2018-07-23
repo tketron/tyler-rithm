@@ -5,8 +5,13 @@ import Joke from './Joke';
 export default class JokeList extends Component {
   render() {
     return (
-      <div>
-        <ul>{this.props.jokes.map(j => <Joke joke={j} />)}</ul>
+      <div className="JokeList">
+        <button onClick={this.props.refreshJokes}>NEW JOKES!</button>
+        {this.props.jokes.length === 0 ? (
+          <p>Loading...</p>
+        ) : (
+          <ul>{this.props.jokes.map(j => <Joke joke={j} />)}</ul>
+        )}
       </div>
     );
   }
