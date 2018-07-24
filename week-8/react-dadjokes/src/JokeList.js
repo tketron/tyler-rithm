@@ -10,7 +10,17 @@ export default class JokeList extends Component {
         {this.props.jokes.length === 0 ? (
           <p>Loading...</p>
         ) : (
-          <ul>{this.props.jokes.map(j => <Joke joke={j} />)}</ul>
+          <ul>
+            {this.props.jokes.map(j => (
+              <Joke
+                key={j.id}
+                id={j.id}
+                joke={j}
+                upvote={() => this.props.onUpvote(j.id)}
+                downvote={() => this.props.onDownvote(j.id)}
+              />
+            ))}
+          </ul>
         )}
       </div>
     );
