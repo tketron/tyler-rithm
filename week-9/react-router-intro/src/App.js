@@ -53,6 +53,31 @@ const Topics = props => {
   );
 };
 
+// const Greet = props => {
+//   return (
+//     <div>
+//       <h2>{`Hello, ${props.match.params.name}`}</h2>
+//     </div>
+//   );
+// };
+
+const Greet = ({ match }) => (
+  <div>
+    <h2>{`Hello, ${match.params.name}`}</h2>
+  </div>
+);
+
+// http://localhost:3000/hola?name=whiskey
+const Greet2 = props => {
+  const params = new URLSearchParams(props.location.search);
+  const name = params.get('name');
+  return (
+    <div>
+      <h2>{`Hola, ${name}`}</h2>
+    </div>
+  );
+};
+
 class App extends Component {
   render() {
     return (
@@ -75,6 +100,7 @@ class App extends Component {
         <Route path="/about" component={About} />
         <Route path="/contact" component={Contact} />
         <Route path="/topics" component={Topics} />
+
         {/* Passing down props through Routes */}
         <Route
           path="/secret"
@@ -85,6 +111,11 @@ class App extends Component {
             />
           )}
         />
+
+        {/* Using URL params */}
+        <Route exact path="/hello/:name" component={Greet} />
+        {/* Using query strings */}
+        <Route exact path="/hola/" component={Greet2} />
       </div>
     );
   }
