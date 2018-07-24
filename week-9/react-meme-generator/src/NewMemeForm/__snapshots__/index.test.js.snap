@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NewMemeForm /> matches snapshot 1`] = `
+<div>
+  <h2>
+    Make a New Meme
+  </h2>
+  <form
+    onSubmit={[Function]}
+  >
+    <label
+      htmlFor="url"
+    >
+      Image URL
+    </label>
+    <input
+      id="form_url"
+      name="url"
+      onChange={[Function]}
+      type="text"
+      value=""
+    />
+    <label
+      htmlFor="topText"
+    >
+      Top Text
+    </label>
+    <input
+      id="form_topText"
+      name="topText"
+      onChange={[Function]}
+      type="text"
+      value=""
+    />
+    <label
+      htmlFor="bottomText"
+    >
+      Bottom Text
+    </label>
+    <input
+      id="form_bottomText"
+      name="bottomText"
+      onChange={[Function]}
+      type="text"
+      value=""
+    />
+    <button
+      id="form_submit"
+      type="submit"
+    >
+      Generate Meme!
+    </button>
+  </form>
+</div>
+`;
