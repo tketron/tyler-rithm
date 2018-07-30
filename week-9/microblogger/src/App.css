@@ -1,0 +1,14 @@
+.App {
+  display: flex;
+  justify-content: space-around;
+}
+
+.App-posts {
+  display: flex;
+  flex-direction: column;
+}
+
+.App-NewPostForm {
+  display: flex;
+  flex-direction: column;
+}
